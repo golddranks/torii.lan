@@ -102,6 +102,8 @@ uci set network.mon.description="mon"
 uci set network.mon.public_key='9hQCYRWb+5tpcee3oLK/J+wFuAZpUo5KSFkxzAGQ4R0='
 uci set network.mon.preshared_key="$WG_PRESHARED_KEY"
 uci set network.mon.allowed_ips="0.0.0.0/0 ::/0"
+uci set network.mon.endpoint_host="drasa.eu"
+uci set network.mon.endpoint_port="51820"
 uci set network.mon.route_allowed_ips='1'
 uci set network.mon.persistent_keepalive='25'
 
