@@ -36,12 +36,12 @@ uci set network.globals.ula_prefix=''
 uci commit network
 
 # Wifi
-uci set wireless.default_radio0.ssid='Torii'
-uci set wireless.default_radio0.key="$WIFI_PW"
-uci set wireless.default_radio0.encryption='psk2'
-uci set wireless.radio0.disabled='0'
-uci set wireless.radio0.country='JP'
-uci set wireless.radio1.disabled='1'
+uci set wireless.default_radio1.ssid='Torii'
+uci set wireless.default_radio1.key="$WIFI_PW"
+uci set wireless.default_radio1.encryption='psk2'
+uci set wireless.radio1.disabled='0'
+uci set wireless.radio1.country='JP'
+uci set wireless.radio0.disabled='1'
 uci commit wireless
 
 # General system settings
