@@ -31,7 +31,7 @@ echo "Security config done."
 
 
 # Lan
-uci set network.lan.ipaddr='10.0.0.1'
+uci set network.lan.ipaddr='10.0.33.1'
 uci set network.globals.ula_prefix=''
 uci commit network
 
@@ -51,16 +51,6 @@ uci set system.cfg01e48a.zonename='Asia/Tokyo'
 uci commit system
 
 echo "Basic network config done."
-
-uci set dhcp.bae=host
-uci set dhcp.bae.name='bae'
-uci set dhcp.bae.mac='F4:5C:89:AA:C3:DD'
-uci set dhcp.bae.ip='10.0.0.40'
-uci set dhcp.bae.hostid='40'
-uci set dhcp.bae.dns='1'
-uci commit dhcp
-
-echo "DHCP static lease settings done."
 
 echo "Start installing external packages."
 
@@ -94,8 +84,9 @@ opkg install luci-proto-wireguard luci-app-wireguard qrencode
 uci set network.wg=interface
 uci set network.wg.proto='wireguard'
 uci set network.wg.private_key="$WG_KEY"
-uci set network.wg.addresses="10.0.99.2/32 2404:7a80:9621:7100::9999:2/128"
+uci set network.wg.addresses="10.0.99.3/32 2404:7a80:9621:7100::9999:3/128"
 uci set network.wg.dns="10.0.0.1 2404:7a80:9621:7100::1"
+uci set network.wg.listen_port='51820'
 
 uci set network.mon=wireguard_wg
 uci set network.mon.description="mon"
@@ -109,5 +100,15 @@ uci set network.mon.persistent_keepalive='25'
 
 uci commit network
 
-# Remove leases that were made before the static DHCP settings
-rm -f /tmp/dhcp.leases
+# Wireguard is untrusted zone? (Maybe it doesn't need to be though?)
+uci set firewall.cfg03dc81.network='wan wan6 wg'
+
+# Allow Wireguard port
+uci set firewall.allow_wireguard=rule
+uci set firewall.allow_wireguard.name='Input Wireguard'
+uci set firewall.allow_wireguard.proto='udp'
+uci set firewall.allow_wireguard.src='wan'
+uci set firewall.allow_wireguard.dest_port='51820'
+uci set firewall.allow_wireguard.target='ACCEPT'
+
+uci commit firewall
